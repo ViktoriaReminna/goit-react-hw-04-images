@@ -1,146 +1,125 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { toastInfo, toastInputQuery, success } from './Toast/Toast';
 import { ColorRing } from 'react-loader-spinner';
 import { getImages } from '../service/image-api';
 import { SearchBar } from './Searchbar/Searchbar';
+import { Wrapper } from './App.styled';
+// import { LinkScroll } from './App.styled.js';
 import { ImageGallery } from './ImageGallery/ImageGallery';
+import { Pagination } from './Button/Button';
 
-import { BtnLoadMore } from './Button/Button';
+export const App = () => {
+  const [query, setQuery] = useState('');
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
-import { Modal } from './Modal/Modal';
-
-export class App extends Component {
-  state = {
-    query: '',
-    images: [],
-    isLoading: false,
-    error: false,
-    page: 1,
-    hits: null,
-    totalHits: null,
-    showModal: false,
-    modalData: {
-      bigImg: '',
-      alt: '',
-    },
+  const changeQuery = newQuery => {
+    setQuery(`${Date.now()}/${newQuery}`);
+    setImages([]);
+    setPage(1);
   };
 
-  changeQuery = newQuery => {
-    this.setState({
-      query: newQuery,
-      images: [],
-      page: 1,
-    });
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.page !== this.state.page
-    ) {
-      this.fetch();
-    }
-  }
-
-  fetch = async () => {
-    const { query, page } = this.state;
-    try {
-      if (!query) {
-        console.log(this.state.query);
-        return;
+  useEffect(() => {
+    if (query === '') return;
+    const loadImage = async () => {
+      try {
+        setLoading(true);
+        const img = await getImages(query, page);
+        if (img.length) {
+          setImages(prevState => (page > 1 ? [...prevState, ...img] : img));
+          success(query);
+          setLoading(false);
+        } else {
+          toastInfo();
+          setLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      this.setState({ isLoading: true });
-      const result = await getImages(query, page);
+    loadImage();
+  }, [page, query]);
 
-      this.setState(prevState => ({
-        images: [...prevState.images, ...result.hits],
-        isLoading: false,
-        hits: result.total,
-        totalHits: result.totalHits,
-      }));
-    } catch (error) {
-      this.setState({ error: true, isLoading: false });
-      console.log(error);
-    }
-  };
-  handleLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
-  };
-
-  toggleModal = evt => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
-    if (evt.target.nodeName !== 'IMG') {
-      console.log('Image clicked');
+  const handleSubmit = event => {
+    event.preventDefault();
+    if (event.target.elements.query.value.trim() === '') {
+      toastInputQuery();
       return;
     }
-    this.setState({
-      modalData: {
-        bigImg: evt.target.dataset.src,
-        alt: evt.target.getAttribute('alt'),
-      },
-    });
-  };
-  resetModal = () => {
-    this.setState({
-      showModal: false,
-      modalData: {
-        bigImg: '',
-        alt: '',
-      },
-    });
-  };
-  render() {
-    const { images, isLoading, hits, totalHits, showModal, modalData } =
-      this.state;
-    const { bigImg, alt } = modalData;
-    return (
-      <div
-        style={{
-          width: '1240px',
-          padding: '0 20px',
-          margin: '0 auto',
-        }}
-      >
-        <SearchBar onSubmit={this.changeQuery} />
-        {images.length === 0 && !isLoading && (
-          <p
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              fontSize: '75px',
-              fontWeight: 'bold',
-              fontStyle: 'italic',
-              color: '#87a9c7',
-            }}
-          >
-            There`re no images yet. Please enter the search category!
-          </p>
-        )}
-        {images.length !== 0 && (
-          <>
-            <ImageGallery data={images} onClick={this.toggleModal} />{' '}
-          </>
-        )}
-        {hits >= 12 && images.length !== totalHits && !isLoading && (
-          <BtnLoadMore click={this.handleLoadMore} />
-        )}
 
-        {isLoading && (
-          <ColorRing
-            visible={true}
-            height="180"
-            width="180"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-          />
-        )}
-        {showModal && (
-          <Modal src={bigImg} alt={alt} onClose={this.resetModal} />
-        )}
-      </div>
-    );
-  }
-}
+    changeQuery(event.target.elements.query.value);
+
+    event.target.reset();
+  };
+  const handleLoadMore = () => {
+    setPage(prevState => prevState + 1);
+  };
+
+  return (
+    <Wrapper>
+      <SearchBar onSubmit={handleSubmit} />
+      {loading && (
+        <ColorRing
+          visible={true}
+          height="180"
+          width="180"
+          ariaLabel="blocks-loading"
+          wrapperStyle={{}}
+          wrapperClass="blocks-wrapper"
+          colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+        />
+      )}
+      {images.length > 0 && <ImageGallery data={images} />}
+      {images.length > 0 && (
+        <Pagination onClick={handleLoadMore}>Load More</Pagination>
+      )}
+      <Toaster position="top-right" reverseOrder={true} />
+      <div id="content"></div>
+    </Wrapper>
+  );
+};
+//   return (
+//     <div
+//       style={{
+//         width: '1240px',
+//         padding: '0 20px',
+//         margin: '0 auto',
+//       }}
+//     >
+//       <SearchBar onSubmit={handleSubmit} />
+//       {loading && (
+//         <ColorRing
+//           visible={true}
+//           height="180"
+//           width="180"
+//           ariaLabel="blocks-loading"
+//           wrapperStyle={{}}
+//           wrapperClass="blocks-wrapper"
+//           colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+//         />
+//       )}
+//       {images.length > 0 && <Gallery imgItems={images} />}
+//       {images.length > 0 && (
+//         <LinkScroll
+//           activeClass="active"
+//           to="content"
+//           spy={true}
+//           smooth={true}
+//           offset={8000}
+//           duration={7000}
+//           delay={1250}
+//           isDynamic={true}
+//         >
+//           <BtnLoadMore onClick={handleLoadMore}>Load More</BtnLoadMore>
+
+//       )}
+//       <Toaster position="top-right" reverseOrder={true} />
+//       <div id="content"></div>
+//     </div>
+//   );
+// };

@@ -1,51 +1,66 @@
 import styled from 'styled-components';
 
-export const Form = styled.form`
-  width: 100%;
-  max-width: 400px; 
-  margin: 0 auto; 
-
-  position: relative;
-
-  margin-bottom: 20px; 
+export const Header = styled.header`
+  top: 0;
+  left: 0;
+  position: sticky;
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 64px;
+  padding-right: 24px;
+  padding-left: 24px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #fff;
+  background-color: #1e90ff;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 `;
 
-export const Input = styled.input`
+export const SearchForm = styled.form`
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 40px; 
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+`;
 
-  border: none;
-  border-bottom: 1px solid #000; 
-  background-color: transparent;
-
-  padding: 8px;
-  padding-right: 40px; 
+export const SearchFormButton = styled.button`
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: #00ced1;
+  opacity: 0.6;
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
   outline: none;
 
-  transition: cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s; 
-
-  font-size: 16px; 
-  color: #000; 
-  font-weight: 300;
-  letter-spacing: 0.03em;
-
-  &::placeholder {
-    font-weight: 200;
+  &:hover {
+    opacity: 1;
+    color: blue;
+    transform: scale(1.05);
   }
 `;
 
-export const InputBtn = styled.button`
-  width: 40px; 
-  height: 40px; 
-
-  font-size: 16px;
-  font-weight: bold;
-  color: #000; 
-
-  position: absolute;
-  top: 0;
-  right: 0;
+export const SearchFormInput = styled.input`
+  display: inline-block;
+  width: 100%;
+  font: inherit;
+  font-size: 20px;
   border: none;
-  background: none;
-  cursor: pointer;
+  outline: none;
+  padding-left: 4px;
+  padding-right: 4px;
+
+  &::placeholder {
+    font: inherit;
+    font-size: 18px;
+  }
 `;

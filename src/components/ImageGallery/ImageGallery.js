@@ -1,21 +1,17 @@
-import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
-import { nanoid } from 'nanoid';
-import { Ul } from './ImageGallery.styled.js';
+import { GalleryImage } from 'components/ImageGalleryItem/ImageGalleryItem';
 
-export const ImageGallery = ({ data, onClick }) => {
+import { ImgGallery, ImageGalleryItem } from './ImageGallery.styled';
+
+export const ImageGallery = ({ data }) => {
   return (
-    <Ul>
-      {data.map(img => {
-        return (
-          <ImageGalleryItem
-            img={img.webformatURL}
-            alt={img.tags}
-            largeImageURL={img.largeImageURL}
-            key={nanoid(4)}
-            onClick={onClick}
-          />
-        );
-      })}{' '}
-    </Ul>
+    <div>
+      <ImgGallery>
+        {data.map(item => (
+          <ImageGalleryItem key={item.id}>
+            <GalleryImage item={item} />
+          </ImageGalleryItem>
+        ))}
+      </ImgGallery>
+    </div>
   );
 };

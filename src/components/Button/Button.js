@@ -1,10 +1,9 @@
-import React from 'react';
-import { Button } from './Button.styled';
+import { PaginationBtn } from './Button.styled';
 
-export const BtnLoadMore = ({ click }) => {
+export const Pagination = ({ onClick, children }) => {
   return (
-    <Button type="button" onClick={click}>
-      Load more...
-    </Button>
+    <>
+      <PaginationBtn onClick={onClick}>{children}</PaginationBtn>
+    </>
   );
 };
