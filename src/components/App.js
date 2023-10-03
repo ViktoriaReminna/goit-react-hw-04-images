@@ -4,10 +4,8 @@ import { toastInfo, toastInputQuery, success } from './Toast/Toast';
 import { ColorRing } from 'react-loader-spinner';
 import { getImages } from '../service/image-api';
 import { SearchBar } from './Searchbar/Searchbar';
-import { Wrapper } from './App.styled';
-// import { LinkScroll } from './App.styled.js';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { Pagination } from './Button/Button';
+import { BtnLoadMore } from './Button/Button';
 
 export const App = () => {
   const [query, setQuery] = useState('');
@@ -61,7 +59,13 @@ export const App = () => {
   };
 
   return (
-    <Wrapper>
+    <div
+      style={{
+        width: '1240px',
+        padding: '0 20px',
+        margin: '0 auto',
+      }}
+    >
       <SearchBar onSubmit={handleSubmit} />
       {loading && (
         <ColorRing
@@ -76,50 +80,10 @@ export const App = () => {
       )}
       {images.length > 0 && <ImageGallery data={images} />}
       {images.length > 0 && (
-        <Pagination onClick={handleLoadMore}>Load More</Pagination>
+        <BtnLoadMore onClick={handleLoadMore}>Load More</BtnLoadMore>
       )}
       <Toaster position="top-right" reverseOrder={true} />
       <div id="content"></div>
-    </Wrapper>
+    </div>
   );
 };
-//   return (
-//     <div
-//       style={{
-//         width: '1240px',
-//         padding: '0 20px',
-//         margin: '0 auto',
-//       }}
-//     >
-//       <SearchBar onSubmit={handleSubmit} />
-//       {loading && (
-//         <ColorRing
-//           visible={true}
-//           height="180"
-//           width="180"
-//           ariaLabel="blocks-loading"
-//           wrapperStyle={{}}
-//           wrapperClass="blocks-wrapper"
-//           colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-//         />
-//       )}
-//       {images.length > 0 && <Gallery imgItems={images} />}
-//       {images.length > 0 && (
-//         <LinkScroll
-//           activeClass="active"
-//           to="content"
-//           spy={true}
-//           smooth={true}
-//           offset={8000}
-//           duration={7000}
-//           delay={1250}
-//           isDynamic={true}
-//         >
-//           <BtnLoadMore onClick={handleLoadMore}>Load More</BtnLoadMore>
-
-//       )}
-//       <Toaster position="top-right" reverseOrder={true} />
-//       <div id="content"></div>
-//     </div>
-//   );
-// };

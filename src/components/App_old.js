@@ -127,7 +127,7 @@
 //         )}
 
 //         {isLoading && (
-{
+
   /* <ColorRing
   visible={true}
   height="180"
@@ -137,7 +137,7 @@
   wrapperClass="blocks-wrapper"
   colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
 />; */
-}
+
 //         )}
 //         {showModal && (
 //           <Modal src={bigImg} alt={alt} onClose={this.resetModal} />

@@ -1,9 +1,9 @@
-import { PaginationBtn } from './Button.styled';
+import { Button } from './Button.styled';
 
-export const Pagination = ({ onClick, children }) => {
+export const BtnLoadMore = ({ onClick, children }) => {
   return (
     <>
-      <PaginationBtn onClick={onClick}>{children}</PaginationBtn>
+      <Button onClick={onClick}>{children}</Button>
     </>
   );
 };
