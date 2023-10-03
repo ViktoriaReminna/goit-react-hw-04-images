@@ -68,15 +68,17 @@ export const App = () => {
     >
       <SearchBar onSubmit={handleSubmit} />
       {loading && (
-        <ColorRing
-          visible={true}
-          height="180"
-          width="180"
-          ariaLabel="blocks-loading"
-          wrapperStyle={{}}
-          wrapperClass="blocks-wrapper"
-          colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-        />
+        <div className="spinner-container">
+          <ColorRing
+            visible={true}
+            height="180"
+            width="180"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+          />
+        </div>
       )}
       {images.length > 0 && <ImageGallery data={images} />}
       {images.length > 0 && (
